@@ -28,8 +28,7 @@
         "test:e2e": "jest --no-cache --runInBand --config jest-e2e.config.ts",
         "lint": "eslint packages/**/src/*.ts packages/**/src/*.tsx",
         "format": "prettier --write \"**/*.+(css|js|json|jsx|less|md|ts|tsx)\"",
-        "release": "turbo run release",
-        "postinstall": "cp -R node_modules/@react-pdf-viewer/root/packages/* node_modules/@react-pdf-viewer"
+        "release": "turbo run release"
     },
     "devDependencies": {
         "@rollup/plugin-json": "^6.0.0",
