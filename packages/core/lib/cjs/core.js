@@ -4022,8 +4022,9 @@ var Viewer = function (_a) {
     return (React__namespace.createElement(LocalizationContext.Provider, { value: localizationContext },
         React__namespace.createElement(ThemeContext.Provider, { value: themeContext },
             React__namespace.createElement("div", { ref: containerRef, className: "rpv-core__viewer rpv-core__viewer--".concat(themeContext.currentTheme), "data-testid": "core__viewer", style: {
-                    height: '40%',
-                    width: '400px',
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: "purple"
                 } }, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
                             data: file.data,
                             name: file.name,
