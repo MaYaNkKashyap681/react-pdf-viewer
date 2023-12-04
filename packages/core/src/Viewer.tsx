@@ -204,8 +204,9 @@ export const Viewer: React.FC<{
                     className={`rpv-core__viewer rpv-core__viewer--${themeContext.currentTheme}`}
                     data-testid="core__viewer"
                     style={{
-                        height: '40%',
-                        width: '400px',
+                        height: '100%',
+                        width: '100%',
+                        backgroundColor: "purple"
                     }}
                 >
                     {file.shouldLoad && (
