@@ -1554,11 +1554,12 @@ var CanvasLayer = function (_a) {
             }
         };
     }, []);
-    return (React__namespace.createElement("div", { className: "rpv-core__canvas-layer", style: {
-            height: "".concat(height, "px"),
-            width: "".concat(width, "px"),
-        } },
-        React__namespace.createElement("canvas", { ref: canvasLayerRef })));
+    return (React__namespace.createElement("div", { className: 'annotation-container' },
+        React__namespace.createElement("div", { className: "rpv-core__canvas-layer", style: {
+                height: "".concat(height, "px"),
+                width: "".concat(width, "px"),
+            } },
+            React__namespace.createElement("canvas", { ref: canvasLayerRef }))));
 };
 
 var PdfJsApiContext = React__namespace.createContext({});
@@ -1727,58 +1728,57 @@ var PageLayer = function (_a) {
             }
         }
     }, [canvasLayerRendered, textLayerRendered]);
-    return (React__namespace.createElement("div", { className: 'annotation-container' },
-        React__namespace.createElement("div", { className: classNames({
-                'rpv-core__page-layer': true,
-                'rpv-core__page-layer--dual': viewMode === exports.ViewMode.DualPage,
-                'rpv-core__page-layer--dual-cover': viewMode === exports.ViewMode.DualPageWithCover,
-                'rpv-core__page-layer--single': viewMode === exports.ViewMode.SinglePage,
-            }), "data-testid": "core__page-layer-".concat(pageIndex), ref: measureRef, style: {
-                height: "".concat(h, "px"),
-                width: "".concat(w, "px"),
-            } }, !page ? (React__namespace.createElement(Spinner, { testId: "core__page-layer-loading-".concat(pageIndex) })) : (React__namespace.createElement(React__namespace.Fragment, null,
-            renderPageLayer({
-                annotationLayer: {
-                    attrs: {},
-                    children: (React__namespace.createElement(AnnotationLayer, { doc: doc, outlines: outlines, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, onExecuteNamedAction: onExecuteNamedAction, onJumpFromLinkAnnotation: onJumpFromLinkAnnotation, onJumpToDest: onJumpToDest })),
-                },
-                canvasLayer: {
-                    attrs: {},
-                    children: (React__namespace.createElement(CanvasLayer, { canvasLayerRef: canvasLayerRef, height: h, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, width: w, onRenderCanvasCompleted: handleRenderCanvasCompleted })),
-                },
+    return (React__namespace.createElement("div", { className: classNames({
+            'rpv-core__page-layer': true,
+            'rpv-core__page-layer--dual': viewMode === exports.ViewMode.DualPage,
+            'rpv-core__page-layer--dual-cover': viewMode === exports.ViewMode.DualPageWithCover,
+            'rpv-core__page-layer--single': viewMode === exports.ViewMode.SinglePage,
+        }), "data-testid": "core__page-layer-".concat(pageIndex), ref: measureRef, style: {
+            height: "".concat(h, "px"),
+            width: "".concat(w, "px"),
+        } }, !page ? (React__namespace.createElement(Spinner, { testId: "core__page-layer-loading-".concat(pageIndex) })) : (React__namespace.createElement(React__namespace.Fragment, null,
+        renderPageLayer({
+            annotationLayer: {
+                attrs: {},
+                children: (React__namespace.createElement(AnnotationLayer, { doc: doc, outlines: outlines, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, onExecuteNamedAction: onExecuteNamedAction, onJumpFromLinkAnnotation: onJumpFromLinkAnnotation, onJumpToDest: onJumpToDest })),
+            },
+            canvasLayer: {
+                attrs: {},
+                children: (React__namespace.createElement(CanvasLayer, { canvasLayerRef: canvasLayerRef, height: h, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, width: w, onRenderCanvasCompleted: handleRenderCanvasCompleted })),
+            },
+            canvasLayerRendered: canvasLayerRendered,
+            doc: doc,
+            height: h,
+            pageIndex: pageIndex,
+            rotation: rotationValue,
+            scale: scale,
+            svgLayer: {
+                attrs: {},
+                children: (React__namespace.createElement(SvgLayer, { height: h, page: page, rotation: rotationValue, scale: scale, width: w })),
+            },
+            textLayer: {
+                attrs: {},
+                children: (React__namespace.createElement(TextLayer, { containerRef: textLayerRef, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, onRenderTextCompleted: handleRenderTextCompleted })),
+            },
+            textLayerRendered: textLayerRendered,
+            width: w,
+            markRendered: onRenderCompleted,
+            onRotatePage: function (direction) { return onRotatePage(pageIndex, direction); },
+        }),
+        plugins.map(function (plugin, idx) {
+            return plugin.renderPageLayer ? (React__namespace.createElement(React__namespace.Fragment, { key: idx }, plugin.renderPageLayer({
+                canvasLayerRef: canvasLayerRef,
                 canvasLayerRendered: canvasLayerRendered,
                 doc: doc,
                 height: h,
                 pageIndex: pageIndex,
                 rotation: rotationValue,
                 scale: scale,
-                svgLayer: {
-                    attrs: {},
-                    children: (React__namespace.createElement(SvgLayer, { height: h, page: page, rotation: rotationValue, scale: scale, width: w })),
-                },
-                textLayer: {
-                    attrs: {},
-                    children: (React__namespace.createElement(TextLayer, { containerRef: textLayerRef, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, onRenderTextCompleted: handleRenderTextCompleted })),
-                },
+                textLayerRef: textLayerRef,
                 textLayerRendered: textLayerRendered,
                 width: w,
-                markRendered: onRenderCompleted,
-                onRotatePage: function (direction) { return onRotatePage(pageIndex, direction); },
-            }),
-            plugins.map(function (plugin, idx) {
-                return plugin.renderPageLayer ? (React__namespace.createElement(React__namespace.Fragment, { key: idx }, plugin.renderPageLayer({
-                    canvasLayerRef: canvasLayerRef,
-                    canvasLayerRendered: canvasLayerRendered,
-                    doc: doc,
-                    height: h,
-                    pageIndex: pageIndex,
-                    rotation: rotationValue,
-                    scale: scale,
-                    textLayerRef: textLayerRef,
-                    textLayerRendered: textLayerRendered,
-                    width: w,
-                }))) : (React__namespace.createElement(React__namespace.Fragment, { key: idx }));
-            }))))));
+            }))) : (React__namespace.createElement(React__namespace.Fragment, { key: idx }));
+        })))));
 };
 
 var core = {

@@ -141,7 +141,7 @@ export const PageLayer: React.FC<{
     }, [canvasLayerRendered, textLayerRendered]);
 
     return (
-        <div className='annotation-container'>
+      
         <div
             className={classNames({
                 'rpv-core__page-layer': true,
@@ -247,7 +247,6 @@ export const PageLayer: React.FC<{
                     )}
                 </>
             )}
-        </div>
         </div>
     );
 };
