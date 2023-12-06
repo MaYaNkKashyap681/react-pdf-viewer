@@ -1491,7 +1491,7 @@ var roundToDivide = function (a, b) {
 
 var MAX_CANVAS_SIZE = 4096 * 4096;
 var CanvasLayer = function (_a) {
-    var canvasLayerRef = _a.canvasLayerRef, height = _a.height, page = _a.page, pageIndex = _a.pageIndex, plugins = _a.plugins, rotation = _a.rotation, scale = _a.scale, width = _a.width, onRenderCanvasCompleted = _a.onRenderCanvasCompleted;
+    var canvasLayerRef = _a.canvasLayerRef, height = _a.height, page = _a.page, pageIndex = _a.pageIndex, plugins = _a.plugins, rotation = _a.rotation, scale = _a.scale, width = _a.width, onRenderCanvasCompleted = _a.onRenderCanvasCompleted, ref = _a.ref;
     var renderTask = React__namespace.useRef();
     useIsomorphicLayoutEffect(function () {
         var task = renderTask.current;
@@ -1554,7 +1554,7 @@ var CanvasLayer = function (_a) {
             }
         };
     }, []);
-    return (React__namespace.createElement("div", { className: 'annotation-container' },
+    return (React__namespace.createElement("div", { className: 'annotation-container', ref: ref },
         React__namespace.createElement("div", { className: "rpv-core__canvas-layer", style: {
                 height: "".concat(height, "px"),
                 width: "".concat(width, "px"),
@@ -1669,7 +1669,7 @@ var TextLayer = function (_a) {
 };
 
 var PageLayer = function (_a) {
-    var doc = _a.doc, measureRef = _a.measureRef, outlines = _a.outlines, pageIndex = _a.pageIndex, pageRotation = _a.pageRotation, pageSize = _a.pageSize, plugins = _a.plugins, renderPage = _a.renderPage, renderQueueKey = _a.renderQueueKey, rotation = _a.rotation, scale = _a.scale, shouldRender = _a.shouldRender, viewMode = _a.viewMode, onExecuteNamedAction = _a.onExecuteNamedAction, onJumpFromLinkAnnotation = _a.onJumpFromLinkAnnotation, onJumpToDest = _a.onJumpToDest, onRenderCompleted = _a.onRenderCompleted, onRotatePage = _a.onRotatePage;
+    var doc = _a.doc, measureRef = _a.measureRef, outlines = _a.outlines, pageIndex = _a.pageIndex, pageRotation = _a.pageRotation, pageSize = _a.pageSize, plugins = _a.plugins, renderPage = _a.renderPage, renderQueueKey = _a.renderQueueKey, rotation = _a.rotation, scale = _a.scale, shouldRender = _a.shouldRender, viewMode = _a.viewMode, onExecuteNamedAction = _a.onExecuteNamedAction, onJumpFromLinkAnnotation = _a.onJumpFromLinkAnnotation, onJumpToDest = _a.onJumpToDest, onRenderCompleted = _a.onRenderCompleted, onRotatePage = _a.onRotatePage, ref = _a.ref;
     var isMounted = useIsMounted();
     var _b = React__namespace.useState(null), page = _b[0], setPage = _b[1];
     var _c = React__namespace.useState(false), canvasLayerRendered = _c[0], setCanvasLayerRendered = _c[1];
@@ -1744,7 +1744,7 @@ var PageLayer = function (_a) {
             },
             canvasLayer: {
                 attrs: {},
-                children: (React__namespace.createElement(CanvasLayer, { canvasLayerRef: canvasLayerRef, height: h, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, width: w, onRenderCanvasCompleted: handleRenderCanvasCompleted })),
+                children: (React__namespace.createElement(CanvasLayer, { canvasLayerRef: canvasLayerRef, height: h, page: page, pageIndex: pageIndex, plugins: plugins, rotation: rotationValue, scale: scale, width: w, onRenderCanvasCompleted: handleRenderCanvasCompleted, ref: ref })),
             },
             canvasLayerRendered: canvasLayerRendered,
             doc: doc,
@@ -2957,7 +2957,7 @@ var ActionType;
     ActionType["Zoom"] = "Zoom";
 })(ActionType || (ActionType = {}));
 var Inner = function (_a) {
-    var currentFile = _a.currentFile, defaultScale = _a.defaultScale, doc = _a.doc, enableSmoothScroll = _a.enableSmoothScroll, estimatedPageSizes = _a.estimatedPageSizes, initialPage = _a.initialPage, initialRotation = _a.initialRotation, initialScale = _a.initialScale, pageLayout = _a.pageLayout, plugins = _a.plugins, renderPage = _a.renderPage, scrollMode = _a.scrollMode, setRenderRange = _a.setRenderRange, viewMode = _a.viewMode, viewerState = _a.viewerState, onDocumentLoad = _a.onDocumentLoad, onOpenFile = _a.onOpenFile, onPageChange = _a.onPageChange, onRotate = _a.onRotate, onRotatePage = _a.onRotatePage, onZoom = _a.onZoom;
+    var currentFile = _a.currentFile, defaultScale = _a.defaultScale, doc = _a.doc, enableSmoothScroll = _a.enableSmoothScroll, estimatedPageSizes = _a.estimatedPageSizes, initialPage = _a.initialPage, initialRotation = _a.initialRotation, initialScale = _a.initialScale, pageLayout = _a.pageLayout, plugins = _a.plugins, renderPage = _a.renderPage, scrollMode = _a.scrollMode, setRenderRange = _a.setRenderRange, viewMode = _a.viewMode, viewerState = _a.viewerState, onDocumentLoad = _a.onDocumentLoad, onOpenFile = _a.onOpenFile, onPageChange = _a.onPageChange, onRotate = _a.onRotate, onRotatePage = _a.onRotatePage, onZoom = _a.onZoom, ref = _a.ref;
     var numPages = doc.numPages;
     var docId = doc.loadingTask.docId;
     var l10n = React__namespace.useContext(LocalizationContext).l10n;
@@ -3597,7 +3597,7 @@ var Inner = function (_a) {
                             })) },
                             React__namespace.createElement(PageLayer, { doc: doc, measureRef: item.measureRef, outlines: outlines, pageIndex: item.index, pageRotation: state.pagesRotation.has(item.index)
                                     ? state.pagesRotation.get(item.index)
-                                    : 0, pageSize: state.pageSizes[item.index], plugins: plugins, renderPage: renderPage, renderQueueKey: renderQueueKey, rotation: state.rotation, scale: state.scale, shouldRender: renderPageIndex === item.index, viewMode: state.viewMode, onExecuteNamedAction: executeNamedAction, onJumpFromLinkAnnotation: handleJumpFromLinkAnnotation, onJumpToDest: jumpToDestination, onRenderCompleted: handlePageRenderCompleted, onRotatePage: rotatePage })));
+                                    : 0, pageSize: state.pageSizes[item.index], plugins: plugins, renderPage: renderPage, renderQueueKey: renderQueueKey, rotation: state.rotation, scale: state.scale, shouldRender: renderPageIndex === item.index, viewMode: state.viewMode, onExecuteNamedAction: executeNamedAction, onJumpFromLinkAnnotation: handleJumpFromLinkAnnotation, onJumpToDest: jumpToDestination, onRenderCompleted: handlePageRenderCompleted, onRotatePage: rotatePage, ref: ref })));
                     })))); }))),
             },
         };
@@ -3978,7 +3978,7 @@ var Viewer = function (_a) {
     } : _p, _q = _a.onRotatePage, onRotatePage = _q === void 0 ? function () {
     } : _q, _r = _a.onSwitchTheme, onSwitchTheme = _r === void 0 ? function () {
     } : _r, _s = _a.onZoom, onZoom = _s === void 0 ? function () {
-    } : _s;
+    } : _s, ref = _a.ref;
     var _t = React__namespace.useState({
         data: fileUrl,
         name: typeof fileUrl === 'string' ? fileUrl : '',
@@ -4040,7 +4040,7 @@ var Viewer = function (_a) {
                             scale: initialScale,
                             scrollMode: scrollMode,
                             viewMode: viewMode,
-                        }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom })); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword }))))));
+                        }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref })); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword }))))));
 };
 
 var Worker = function (_a) {
