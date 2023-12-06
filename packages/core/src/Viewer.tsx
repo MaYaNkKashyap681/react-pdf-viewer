@@ -97,6 +97,7 @@ export const Viewer: React.FC<{
     // Invoked after switching to `theme`
     onSwitchTheme?(theme: string): void;
     onZoom?(e: ZoomEvent): void;
+    ref?: React.Ref<HTMLDivElement>
 }> = ({
     characterMap,
     defaultScale,
@@ -140,6 +141,7 @@ export const Viewer: React.FC<{
     onZoom = () => {
         /**/
     },
+    ref
 }) => {
     const [file, setFile] = React.useState<FileState>({
         data: fileUrl,
@@ -255,6 +257,7 @@ export const Viewer: React.FC<{
                                             onRotate={onRotate}
                                             onRotatePage={onRotatePage}
                                             onZoom={onZoom}
+                                            ref = {ref}
                                         />
                                     )}
                                     scrollMode={scrollMode}

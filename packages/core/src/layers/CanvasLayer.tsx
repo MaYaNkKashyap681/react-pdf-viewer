@@ -29,8 +29,9 @@ export const CanvasLayer: React.FC<{
     rotation: number;
     scale: number;
     width: number;
+    ref?: React.Ref<HTMLDivElement>
     onRenderCanvasCompleted: () => void;
-}> = ({ canvasLayerRef, height, page, pageIndex, plugins, rotation, scale, width, onRenderCanvasCompleted }) => {
+}> = ({ canvasLayerRef, height, page, pageIndex, plugins, rotation, scale, width, onRenderCanvasCompleted, ref }) => {
     const renderTask = React.useRef<PdfJs.PageRenderTask>();
 
     useIsomorphicLayoutEffect(() => {
@@ -119,7 +120,7 @@ export const CanvasLayer: React.FC<{
     }, []);
 
     return (
-        <div className='annotation-container'>
+        <div className='annotation-container' ref = {ref}>
             <div
                 className="rpv-core__canvas-layer"
                 style={{

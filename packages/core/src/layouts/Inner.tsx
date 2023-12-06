@@ -166,6 +166,7 @@ export const Inner: React.FC<{
     onRotate(e: RotateEvent): void;
     onRotatePage(e: RotatePageEvent): void;
     onZoom(e: ZoomEvent): void;
+    ref?: React.Ref<HTMLDivElement>
 }> = ({
     currentFile,
     defaultScale,
@@ -188,6 +189,7 @@ export const Inner: React.FC<{
     onRotate,
     onRotatePage,
     onZoom,
+    ref
 }) => {
         const { numPages } = doc;
         const docId = doc.loadingTask.docId;
@@ -1103,6 +1105,7 @@ export const Inner: React.FC<{
                                                         onJumpToDest={jumpToDestination}
                                                         onRenderCompleted={handlePageRenderCompleted}
                                                         onRotatePage={rotatePage}
+                                                        ref = {ref}
                                                     />
                                                 </div>
                                             );

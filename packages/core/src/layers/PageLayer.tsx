@@ -44,6 +44,7 @@ export const PageLayer: React.FC<{
     onJumpToDest(destination: Destination): void;
     onRenderCompleted(pageIndex: number): void;
     onRotatePage(pageIndex: number, direction: RotateDirection): void;
+    ref?: React.Ref<HTMLDivElement>
 }> = ({
     doc,
     measureRef,
@@ -63,6 +64,7 @@ export const PageLayer: React.FC<{
     onJumpToDest,
     onRenderCompleted,
     onRotatePage,
+    ref
 }) => {
     const isMounted = useIsMounted();
     const [page, setPage] = React.useState<PdfJs.Page>(null);
@@ -191,6 +193,7 @@ export const PageLayer: React.FC<{
                                     scale={scale}
                                     width={w}
                                     onRenderCanvasCompleted={handleRenderCanvasCompleted}
+                                    ref = {ref}
                                 />
                             ),
                         },
