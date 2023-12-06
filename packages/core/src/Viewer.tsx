@@ -225,7 +225,7 @@ export const Viewer: React.FC<{
                                             doc={doc}
                                             render={(estimatedPageSizes: PageSize[], initialScale: number) => (
                                                 <div>
-                                                    <PdfWriter writing={writing} />
+                                                    <PdfWriter writing={true} />
                                                     <Inner
                                                         currentFile={{
                                                             data: file.data,

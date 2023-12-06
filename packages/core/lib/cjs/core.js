@@ -4113,7 +4113,7 @@ var Viewer = function (_a) {
     } : _p, _q = _a.onRotatePage, onRotatePage = _q === void 0 ? function () {
     } : _q, _r = _a.onSwitchTheme, onSwitchTheme = _r === void 0 ? function () {
     } : _r, _s = _a.onZoom, onZoom = _s === void 0 ? function () {
-    } : _s, ref = _a.ref, writing = _a.writing;
+    } : _s, ref = _a.ref; _a.writing;
     var _t = React__namespace.useState({
         data: fileUrl,
         name: typeof fileUrl === 'string' ? fileUrl : '',
@@ -4162,7 +4162,7 @@ var Viewer = function (_a) {
                     width: '100%',
                 } },
                 React__namespace.createElement(React__namespace.Fragment, null, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement("div", null,
-                            React__namespace.createElement(PdfWriter, { writing: writing }),
+                            React__namespace.createElement(PdfWriter, { writing: true }),
                             React__namespace.createElement(Inner, { currentFile: {
                                     data: file.data,
                                     name: file.name,
