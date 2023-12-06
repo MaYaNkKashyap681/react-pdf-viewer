@@ -4160,11 +4160,10 @@ var Viewer = function (_a) {
             React__namespace.createElement("div", { ref: containerRef, className: "rpv-core__viewer rpv-core__viewer--".concat(themeContext.currentTheme), "data-testid": "core__viewer", style: {
                     height: '100%',
                     width: '100%',
-                    backgroundColor: "purple"
                 } },
-                React__namespace.createElement(React__namespace.Fragment, null,
-                    React__namespace.createElement(PdfWriter, { writing: writing }),
-                    file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
+                React__namespace.createElement(React__namespace.Fragment, null, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement("div", null,
+                            React__namespace.createElement(PdfWriter, { writing: writing }),
+                            React__namespace.createElement(Inner, { currentFile: {
                                     data: file.data,
                                     name: file.name,
                                 }, defaultScale: defaultScale, doc: doc, enableSmoothScroll: enableSmoothScroll, estimatedPageSizes: estimatedPageSizes, initialPage: initialPage, initialRotation: initialRotation, initialScale: initialScale, pageLayout: pageLayout, plugins: plugins, renderPage: renderPage, scrollMode: scrollMode, setRenderRange: setRenderRange, viewMode: viewMode, viewerState: {
@@ -4178,7 +4177,7 @@ var Viewer = function (_a) {
                                     scale: initialScale,
                                     scrollMode: scrollMode,
                                     viewMode: viewMode,
-                                }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref })); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword })))))));
+                                }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref }))); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword })))))));
 };
 
 var Worker = function (_a) {
