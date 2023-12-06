@@ -120,15 +120,15 @@ export const CanvasLayer: React.FC<{
 
     return (
         <div className='annotation-container'>
-        <div
-            className="rpv-core__canvas-layer"
-            style={{
-                height: `${height}px`,
-                width: `${width}px`,
-            }}
-        >
-            <canvas ref={canvasLayerRef} />
-        </div>
+            <div
+                className="rpv-core__canvas-layer"
+                style={{
+                    height: `${height}px`,
+                    width: `${width}px`,
+                }}
+            >
+                <canvas ref={canvasLayerRef} />
+            </div>
         </div>
     );
 };
