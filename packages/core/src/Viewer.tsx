@@ -211,9 +211,21 @@ export const Viewer: React.FC<{
                         style={{
                             height: '100%',
                             width: '100%',
+                            position: "relative"
                         }}
                     >
                         <>
+                            <div style={{
+                                width: '100%',
+                                height: '100%',
+                                position: 'absolute',
+                                top: '0',
+                                right: '0',
+                                bottom: '0',
+                                left: '0',
+                            }}>
+                                <PdfWriter writing={true} />
+                            </div>
                             {file.shouldLoad && (
                                 <DocumentLoader
                                     characterMap={characterMap}
@@ -224,47 +236,45 @@ export const Viewer: React.FC<{
                                             defaultScale={defaultScale}
                                             doc={doc}
                                             render={(estimatedPageSizes: PageSize[], initialScale: number) => (
-                                            
-                                                   
-                                                    <Inner
-                                                        currentFile={{
-                                                            data: file.data,
-                                                            name: file.name,
-                                                        }}
-                                                        defaultScale={defaultScale}
-                                                        doc={doc}
-                                                        enableSmoothScroll={enableSmoothScroll}
-                                                        estimatedPageSizes={estimatedPageSizes}
-                                                        initialPage={initialPage}
-                                                        initialRotation={initialRotation}
-                                                        initialScale={initialScale}
-                                                        pageLayout={pageLayout}
-                                                        plugins={plugins}
-                                                        renderPage={renderPage}
-                                                        scrollMode={scrollMode}
-                                                        setRenderRange={setRenderRange}
-                                                        viewMode={viewMode}
-                                                        viewerState={{
-                                                            file,
-                                                            fullScreenMode: FullScreenMode.Normal,
-                                                            pageIndex: -1,
-                                                            pageHeight: estimatedPageSizes[0].pageHeight,
-                                                            pageWidth: estimatedPageSizes[0].pageWidth,
-                                                            pagesRotation: new Map(),
-                                                            rotation: initialRotation,
-                                                            scale: initialScale,
-                                                            scrollMode,
-                                                            viewMode,
-                                                        }}
-                                                        onDocumentLoad={onDocumentLoad}
-                                                        onOpenFile={openFile}
-                                                        onPageChange={onPageChange}
-                                                        onRotate={onRotate}
-                                                        onRotatePage={onRotatePage}
-                                                        onZoom={onZoom}
-                                                        ref={ref}
-                                                    />
-                                               
+                                                <Inner
+                                                    currentFile={{
+                                                        data: file.data,
+                                                        name: file.name,
+                                                    }}
+                                                    defaultScale={defaultScale}
+                                                    doc={doc}
+                                                    enableSmoothScroll={enableSmoothScroll}
+                                                    estimatedPageSizes={estimatedPageSizes}
+                                                    initialPage={initialPage}
+                                                    initialRotation={initialRotation}
+                                                    initialScale={initialScale}
+                                                    pageLayout={pageLayout}
+                                                    plugins={plugins}
+                                                    renderPage={renderPage}
+                                                    scrollMode={scrollMode}
+                                                    setRenderRange={setRenderRange}
+                                                    viewMode={viewMode}
+                                                    viewerState={{
+                                                        file,
+                                                        fullScreenMode: FullScreenMode.Normal,
+                                                        pageIndex: -1,
+                                                        pageHeight: estimatedPageSizes[0].pageHeight,
+                                                        pageWidth: estimatedPageSizes[0].pageWidth,
+                                                        pagesRotation: new Map(),
+                                                        rotation: initialRotation,
+                                                        scale: initialScale,
+                                                        scrollMode,
+                                                        viewMode,
+                                                    }}
+                                                    onDocumentLoad={onDocumentLoad}
+                                                    onOpenFile={openFile}
+                                                    onPageChange={onPageChange}
+                                                    onRotate={onRotate}
+                                                    onRotatePage={onRotatePage}
+                                                    onZoom={onZoom}
+                                                    ref={ref}
+                                                />
+
                                             )}
                                             scrollMode={scrollMode}
                                             viewMode={viewMode}

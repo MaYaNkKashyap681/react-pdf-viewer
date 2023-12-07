@@ -3961,6 +3961,131 @@ var isSameUrl = function (a, b) {
     return false;
 };
 
+var colors = [
+    { name: "Black", code: "black" },
+    { name: "Yellow", code: "yellow" },
+    { name: "Red", code: "red" },
+    { name: "Blue", code: "blue" },
+    { name: "Green", code: "green" }
+];
+var DrawingApp = function (_a) {
+    var writing = _a.writing;
+    var _b = React.useState([]), drawingPaths = _b[0], setDrawingPaths = _b[1];
+    var _c = React.useState(''), currentPath = _c[0], setCurrentPath = _c[1];
+    var _d = React.useState(4), strokeWidth = _d[0]; _d[1];
+    var _e = React.useState([]), undoHistory = _e[0], setUndoHistory = _e[1];
+    var _f = React.useState([]), redoHistory = _f[0], setRedoHistory = _f[1];
+    var _g = React.useState(colors[0]), selectedColor = _g[0], setSelectedColor = _g[1];
+    var _h = React.useState([]), pathCoordinates = _h[0], setPathCoordinates = _h[1];
+    var _j = React.useState(null), rectDims = _j[0], setRectDims = _j[1];
+    var _k = React.useState(0); _k[0]; var setScrollPosition = _k[1];
+    var drawingRef = React.useRef(null);
+    var line = function (pointA, pointB) {
+        var lengthX = pointB[0] - pointA[0];
+        var lengthY = pointB[1] - pointA[1];
+        return {
+            length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+            angle: Math.atan2(lengthY, lengthX),
+        };
+    };
+    var controlPoint = function (current, previous, next, reverse) {
+        var p = previous || current;
+        var n = next || current;
+        var smoothing = 0.2;
+        var o = line(p, n);
+        var angle = o.angle + (reverse ? Math.PI : 0);
+        var length = o.length * smoothing;
+        var x = current[0] + Math.cos(angle) * length;
+        var y = current[1] + Math.sin(angle) * length;
+        return [x, y];
+    };
+    var bezierCommand = function (point, i, a) {
+        var _a = controlPoint(a[i - 1], a[i - 2], point, false), cpsX = _a[0], cpsY = _a[1];
+        var _b = controlPoint(point, a[i - 1], a[i + 1], true), cpeX = _b[0], cpeY = _b[1];
+        return "C ".concat(cpsX, ",").concat(cpsY, " ").concat(cpeX, ",").concat(cpeY, " ").concat(point[0], ",").concat(point[1], " ");
+    };
+    var handleMouseDown = function (event) {
+        if (!writing)
+            return;
+        var x = event.clientX;
+        var y = event.clientY + window.scrollY;
+        setCurrentPath("M ".concat(x, " ").concat(y));
+        setRedoHistory([]);
+        setPathCoordinates([[x, y]]);
+    };
+    var handleMouseMove = function (event) {
+        setScrollPosition(window.scrollY);
+        if (currentPath && drawingRef.current) {
+            var x = event.clientX;
+            var y = event.clientY + window.scrollY;
+            if (rectDims) {
+                x -= rectDims.left;
+                y += rectDims.top;
+            }
+            if (x >= 0 &&
+                y >= 0 &&
+                x <= drawingRef.current.offsetWidth &&
+                y <= drawingRef.current.offsetHeight) {
+                setPathCoordinates(__spreadArray(__spreadArray([], pathCoordinates, true), [[x, y]], false));
+                if (pathCoordinates.length >= 3) {
+                    var len = pathCoordinates.length;
+                    var pathData_1 = bezierCommand(pathCoordinates[len - 1], len - 1, pathCoordinates);
+                    setCurrentPath(function (prevPath) { return prevPath + pathData_1; });
+                }
+            }
+        }
+    };
+    var handleMouseUp = function () {
+        if (currentPath) {
+            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [{ path: currentPath, color: selectedColor.code }], false); });
+            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
+            setCurrentPath('');
+            setPathCoordinates([]);
+        }
+    };
+    var handleUndo = function () {
+        if (undoHistory.length > 0) {
+            var previousPaths = undoHistory[undoHistory.length - 1];
+            setUndoHistory(function (prevUndoHistory) { return prevUndoHistory.slice(0, -1); });
+            setDrawingPaths(previousPaths);
+            setRedoHistory(function (prevRedoHistory) { return __spreadArray(__spreadArray([], prevRedoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
+        }
+    };
+    var handleRedo = function () {
+        if (redoHistory.length > 0) {
+            var nextPaths = redoHistory[redoHistory.length - 1];
+            setRedoHistory(function (prevRedoHistory) { return prevRedoHistory.slice(0, -1); });
+            setDrawingPaths(nextPaths);
+            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
+        }
+    };
+    React.useEffect(function () {
+        var _a;
+        var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
+        setRectDims(rect);
+    }, []);
+    return (React.createElement("div", null,
+        React.createElement("div", { className: "h-full", style: { border: '1px solid #ccc' }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
+            React.createElement("svg", { width: "100%", height: "100%", xmlns: "http://www.w3.org/2000/svg" },
+                React.createElement("g", null,
+                    drawingPaths.map(function (pathObj, index) { return (React.createElement("g", { key: index, stroke: pathObj.color, fill: "none", strokeWidth: strokeWidth },
+                        React.createElement("path", { d: pathObj.path }))); }),
+                    currentPath && (React.createElement("g", { stroke: selectedColor.code, fill: "none", strokeWidth: strokeWidth },
+                        React.createElement("path", { d: currentPath })))))),
+        React.createElement("div", { className: 'h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group' },
+            React.createElement("div", { className: "flex items-center gap-4" },
+                React.createElement("div", { className: 'w-[2rem] h-[2rem] rounded-full', style: {
+                        backgroundColor: selectedColor.code
+                    } }),
+                React.createElement("span", null, selectedColor.name)),
+            React.createElement("div", { className: 'absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex' }, colors.map(function (item) { return (React.createElement("div", { className: 'w-[2rem] h-[2rem] rounded-full', key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
+                    backgroundColor: item.code
+                } })); }))),
+        React.createElement("div", { className: 'bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between' },
+            React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'), disabled: undoHistory.length === 0 }, "Undo"),
+            React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'), disabled: redoHistory.length === 0 }, "Redo"))));
+};
+
 var NUM_OVERSCAN_PAGES = 3;
 var DEFAULT_RENDER_RANGE = function (visiblePagesRange) {
     return {
@@ -4025,22 +4150,34 @@ var Viewer = function (_a) {
             React__namespace.createElement("div", { ref: containerRef, className: "rpv-core__viewer rpv-core__viewer--".concat(themeContext.currentTheme), "data-testid": "core__viewer", style: {
                     height: '100%',
                     width: '100%',
+                    position: "relative"
                 } },
-                React__namespace.createElement(React__namespace.Fragment, null, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
-                                data: file.data,
-                                name: file.name,
-                            }, defaultScale: defaultScale, doc: doc, enableSmoothScroll: enableSmoothScroll, estimatedPageSizes: estimatedPageSizes, initialPage: initialPage, initialRotation: initialRotation, initialScale: initialScale, pageLayout: pageLayout, plugins: plugins, renderPage: renderPage, scrollMode: scrollMode, setRenderRange: setRenderRange, viewMode: viewMode, viewerState: {
-                                file: file,
-                                fullScreenMode: exports.FullScreenMode.Normal,
-                                pageIndex: -1,
-                                pageHeight: estimatedPageSizes[0].pageHeight,
-                                pageWidth: estimatedPageSizes[0].pageWidth,
-                                pagesRotation: new Map(),
-                                rotation: initialRotation,
-                                scale: initialScale,
-                                scrollMode: scrollMode,
-                                viewMode: viewMode,
-                            }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref })); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword })))))));
+                React__namespace.createElement(React__namespace.Fragment, null,
+                    React__namespace.createElement("div", { style: {
+                            width: '100%',
+                            height: '100%',
+                            position: 'absolute',
+                            top: '0',
+                            right: '0',
+                            bottom: '0',
+                            left: '0',
+                        } },
+                        React__namespace.createElement(DrawingApp, { writing: true })),
+                    file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
+                                    data: file.data,
+                                    name: file.name,
+                                }, defaultScale: defaultScale, doc: doc, enableSmoothScroll: enableSmoothScroll, estimatedPageSizes: estimatedPageSizes, initialPage: initialPage, initialRotation: initialRotation, initialScale: initialScale, pageLayout: pageLayout, plugins: plugins, renderPage: renderPage, scrollMode: scrollMode, setRenderRange: setRenderRange, viewMode: viewMode, viewerState: {
+                                    file: file,
+                                    fullScreenMode: exports.FullScreenMode.Normal,
+                                    pageIndex: -1,
+                                    pageHeight: estimatedPageSizes[0].pageHeight,
+                                    pageWidth: estimatedPageSizes[0].pageWidth,
+                                    pagesRotation: new Map(),
+                                    rotation: initialRotation,
+                                    scale: initialScale,
+                                    scrollMode: scrollMode,
+                                    viewMode: viewMode,
+                                }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref })); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword })))))));
 };
 
 var Worker = function (_a) {
