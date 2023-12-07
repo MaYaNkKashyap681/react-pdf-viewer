@@ -19,8 +19,8 @@ const colors: Color[] = [
 ];
 
 const DrawingApp: React.FC<{
-    writing: boolean
-}> = ({writing}) => {
+  writing: boolean;
+}> = ({ writing }) => {
   const [drawingPaths, setDrawingPaths] = useState<DrawingPath[]>([]);
   const [currentPath, setCurrentPath] = useState<string>('');
   const [strokeWidth, setStrokeWidth] = useState<number>(4);
@@ -42,7 +42,12 @@ const DrawingApp: React.FC<{
     };
   };
 
-  const controlPoint = (current: [number, number], previous: [number, number] | null, next: [number, number] | null, reverse: boolean) => {
+  const controlPoint = (
+    current: [number, number],
+    previous: [number, number] | null,
+    next: [number, number] | null,
+    reverse: boolean
+  ) => {
     const p = previous || current;
     const n = next || current;
     const smoothing = 0.2;
@@ -61,7 +66,7 @@ const DrawingApp: React.FC<{
   };
 
   const handleMouseDown = (event: React.MouseEvent) => {
-    if(!writing) return;
+    if (!writing) return;
     const x = event.clientX;
     const y = event.clientY + window.scrollY;
     setCurrentPath(`M ${x} ${y}`);
@@ -102,8 +107,14 @@ const DrawingApp: React.FC<{
 
   const handleMouseUp = () => {
     if (currentPath) {
-      setDrawingPaths((prevPaths) => [...prevPaths, { path: currentPath, color: selectedColor.code }]);
-      setUndoHistory((prevUndoHistory) => [...prevUndoHistory, [...drawingPaths]]);
+      setDrawingPaths((prevPaths) => [
+        ...prevPaths,
+        { path: currentPath, color: selectedColor.code },
+      ]);
+      setUndoHistory((prevUndoHistory) => [
+        ...prevUndoHistory,
+        [...drawingPaths],
+      ]);
       setCurrentPath('');
       setPathCoordinates([]);
     }
@@ -114,7 +125,10 @@ const DrawingApp: React.FC<{
       const previousPaths = undoHistory[undoHistory.length - 1];
       setUndoHistory((prevUndoHistory) => prevUndoHistory.slice(0, -1));
       setDrawingPaths(previousPaths);
-      setRedoHistory((prevRedoHistory) => [...prevRedoHistory, [...drawingPaths]]);
+      setRedoHistory((prevRedoHistory) => [
+        ...prevRedoHistory,
+        [...drawingPaths],
+      ]);
     }
   };
 
@@ -123,7 +137,10 @@ const DrawingApp: React.FC<{
       const nextPaths = redoHistory[redoHistory.length - 1];
       setRedoHistory((prevRedoHistory) => prevRedoHistory.slice(0, -1));
       setDrawingPaths(nextPaths);
-      setUndoHistory((prevUndoHistory) => [...prevUndoHistory, [...drawingPaths]]);
+      setUndoHistory((prevUndoHistory) => [
+        ...prevUndoHistory,
+        [...drawingPaths],
+      ]);
     }
   };
 
@@ -133,10 +150,15 @@ const DrawingApp: React.FC<{
   }, []);
 
   return (
-    <div>
+    <div style={{
+      width: '100%',
+      height: '100%',
+    }}>
       <div
         className="h-full"
-        style={{ border: '1px solid #ccc' }}
+        style={{
+          border: '1px solid #ccc',
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -145,44 +167,142 @@ const DrawingApp: React.FC<{
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <g>
             {drawingPaths.map((pathObj, index) => (
-              <g key={index} stroke={pathObj.color} fill="none" strokeWidth={strokeWidth}>
+              <g
+                key={index}
+                stroke={pathObj.color}
+                fill="none"
+                strokeWidth={strokeWidth}
+              >
                 <path d={pathObj.path} />
               </g>
             ))}
             {currentPath && (
-              <g stroke={selectedColor.code} fill="none" strokeWidth={strokeWidth}>
+              <g
+                stroke={selectedColor.code}
+                fill="none"
+                strokeWidth={strokeWidth}
+              >
                 <path d={currentPath} />
               </g>
             )}
           </g>
         </svg>
       </div>
-      <div className='h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group'>
-        <div className={`flex items-center gap-4`}>
-          <div className='w-[2rem] h-[2rem] rounded-full' style={{
-            backgroundColor: selectedColor.code
-          }}>
-          </div>
+      <div
+        className="h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group"
+        style={{
+          position: 'fixed',
+          bottom: '4px',
+          left: '4px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#ffffff',
+          border: '2px solid #000000',
+          boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
+          borderRadius: '10px',
+        }}
+      >
+        <div
+          className={`flex items-center gap-4`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+        >
+          <div
+            className="w-[2rem] h-[2rem] rounded-full"
+            style={{
+              width: '2rem',
+              height: '2rem',
+              borderRadius: '50%',
+              backgroundColor: selectedColor.code,
+            }}
+          ></div>
           <span>{selectedColor.name}</span>
         </div>
-        <div className='absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex'>
-          {
-            colors.map((item) => (
-              <div
-                className='w-[2rem] h-[2rem] rounded-full'
-                key={item.name}
-                onClick={() => setSelectedColor(item)}
-                style={{
-                  backgroundColor: item.code
-                }}>
-              </div>
-            ))
-          }
+        <div
+          className="absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex"
+          style={{
+            position: 'absolute',
+            top: '-400%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+            backgroundColor: '#ffffff',
+            border: '1px solid #000000',
+            padding: '16px',
+            borderRadius: '16px',
+          }}
+        >
+          {colors.map((item) => (
+            <div
+              className="w-[2rem] h-[2rem] rounded-full"
+              key={item.name}
+              onClick={() => setSelectedColor(item)}
+              style={{
+                width: '2rem',
+                height: '2rem',
+                borderRadius: '50%',
+                backgroundColor: item.code,
+              }}
+            ></div>
+          ))}
         </div>
       </div>
-      <div className='bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between'>
-        <button onClick={handleUndo} className={`p-2 rounded-md ${undoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'}`} disabled={undoHistory.length === 0}>Undo</button>
-        <button onClick={handleRedo} className={`hover:bg-green-300 p-2 rounded-md ${redoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'}`} disabled={redoHistory.length === 0}>Redo</button>
+      <div
+        className="bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between"
+        style={{
+          backgroundColor: '#ffffff',
+          boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
+          borderRadius: '10px',
+          position: 'fixed',
+          top: '4px',
+          left: '4px',
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'start',
+          gap: '12px',
+          justifyContent: 'space-between',
+        }}
+      >
+        <button
+          onClick={handleUndo}
+          className={`p-2 rounded-md ${
+            undoHistory.length === 0
+              ? 'hover:bg-gray-300 text-opacity-30'
+              : 'hover:bg-green-300'
+          }`}
+          disabled={undoHistory.length === 0}
+          style={{
+            padding: '8px',
+            borderRadius: '8px',
+            backgroundColor:
+              undoHistory.length === 0 ? 'transparent' : '#4CAF50',
+            color: undoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
+          }}
+        >
+          Undo
+        </button>
+        <button
+          onClick={handleRedo}
+          className={`hover:bg-green-300 p-2 rounded-md ${
+            redoHistory.length === 0
+              ? 'hover:bg-gray-300 text-opacity-30'
+              : 'hover:bg-green-300'
+          }`}
+          disabled={redoHistory.length === 0}
+          style={{
+            padding: '8px',
+            borderRadius: '8px',
+            backgroundColor:
+              redoHistory.length === 0 ? 'transparent' : '#4CAF50',
+            color: redoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
+          }}
+        >
+          Redo
+        </button>
       </div>
     </div>
   );

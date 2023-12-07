@@ -4037,8 +4037,12 @@ var DrawingApp = function (_a) {
     };
     var handleMouseUp = function () {
         if (currentPath) {
-            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [{ path: currentPath, color: selectedColor.code }], false); });
-            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
+            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [
+                { path: currentPath, color: selectedColor.code },
+            ], false); });
+            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [
+                __spreadArray([], drawingPaths, true),
+            ], false); });
             setCurrentPath('');
             setPathCoordinates([]);
         }
@@ -4048,7 +4052,9 @@ var DrawingApp = function (_a) {
             var previousPaths = undoHistory[undoHistory.length - 1];
             setUndoHistory(function (prevUndoHistory) { return prevUndoHistory.slice(0, -1); });
             setDrawingPaths(previousPaths);
-            setRedoHistory(function (prevRedoHistory) { return __spreadArray(__spreadArray([], prevRedoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
+            setRedoHistory(function (prevRedoHistory) { return __spreadArray(__spreadArray([], prevRedoHistory, true), [
+                __spreadArray([], drawingPaths, true),
+            ], false); });
         }
     };
     var handleRedo = function () {
@@ -4056,7 +4062,9 @@ var DrawingApp = function (_a) {
             var nextPaths = redoHistory[redoHistory.length - 1];
             setRedoHistory(function (prevRedoHistory) { return prevRedoHistory.slice(0, -1); });
             setDrawingPaths(nextPaths);
-            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
+            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [
+                __spreadArray([], drawingPaths, true),
+            ], false); });
         }
     };
     React.useEffect(function () {
@@ -4064,26 +4072,88 @@ var DrawingApp = function (_a) {
         var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
         setRectDims(rect);
     }, []);
-    return (React.createElement("div", null,
-        React.createElement("div", { className: "h-full", style: { border: '1px solid #ccc' }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
+    return (React.createElement("div", { style: {
+            width: '100%',
+            height: '100%',
+        } },
+        React.createElement("div", { className: "h-full", style: {
+                border: '1px solid #ccc',
+            }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
             React.createElement("svg", { width: "100%", height: "100%", xmlns: "http://www.w3.org/2000/svg" },
                 React.createElement("g", null,
                     drawingPaths.map(function (pathObj, index) { return (React.createElement("g", { key: index, stroke: pathObj.color, fill: "none", strokeWidth: strokeWidth },
                         React.createElement("path", { d: pathObj.path }))); }),
                     currentPath && (React.createElement("g", { stroke: selectedColor.code, fill: "none", strokeWidth: strokeWidth },
                         React.createElement("path", { d: currentPath })))))),
-        React.createElement("div", { className: 'h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group' },
-            React.createElement("div", { className: "flex items-center gap-4" },
-                React.createElement("div", { className: 'w-[2rem] h-[2rem] rounded-full', style: {
-                        backgroundColor: selectedColor.code
+        React.createElement("div", { className: "h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group", style: {
+                position: 'fixed',
+                bottom: '4px',
+                left: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#ffffff',
+                border: '2px solid #000000',
+                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+            } },
+            React.createElement("div", { className: "flex items-center gap-4", style: {
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                } },
+                React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", style: {
+                        width: '2rem',
+                        height: '2rem',
+                        borderRadius: '50%',
+                        backgroundColor: selectedColor.code,
                     } }),
                 React.createElement("span", null, selectedColor.name)),
-            React.createElement("div", { className: 'absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex' }, colors.map(function (item) { return (React.createElement("div", { className: 'w-[2rem] h-[2rem] rounded-full', key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
-                    backgroundColor: item.code
+            React.createElement("div", { className: "absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex", style: {
+                    position: 'absolute',
+                    top: '-400%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #000000',
+                    padding: '16px',
+                    borderRadius: '16px',
+                } }, colors.map(function (item) { return (React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
+                    width: '2rem',
+                    height: '2rem',
+                    borderRadius: '50%',
+                    backgroundColor: item.code,
                 } })); }))),
-        React.createElement("div", { className: 'bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between' },
-            React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'), disabled: undoHistory.length === 0 }, "Undo"),
-            React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'), disabled: redoHistory.length === 0 }, "Redo"))));
+        React.createElement("div", { className: "bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between", style: {
+                backgroundColor: '#ffffff',
+                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+                position: 'fixed',
+                top: '4px',
+                left: '4px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'start',
+                gap: '12px',
+                justifyContent: 'space-between',
+            } },
+            React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0
+                    ? 'hover:bg-gray-300 text-opacity-30'
+                    : 'hover:bg-green-300'), disabled: undoHistory.length === 0, style: {
+                    padding: '8px',
+                    borderRadius: '8px',
+                    backgroundColor: undoHistory.length === 0 ? 'transparent' : '#4CAF50',
+                    color: undoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
+                } }, "Undo"),
+            React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0
+                    ? 'hover:bg-gray-300 text-opacity-30'
+                    : 'hover:bg-green-300'), disabled: redoHistory.length === 0, style: {
+                    padding: '8px',
+                    borderRadius: '8px',
+                    backgroundColor: redoHistory.length === 0 ? 'transparent' : '#4CAF50',
+                    color: redoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
+                } }, "Redo"))));
 };
 
 var NUM_OVERSCAN_PAGES = 3;
