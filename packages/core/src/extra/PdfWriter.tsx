@@ -153,6 +153,7 @@ const PdfWriter: React.FC<{
     <div style={{
       width: '100%',
       height: '100%',
+      zIndex: 46,
     }}>
       <div
         className="h-full"
