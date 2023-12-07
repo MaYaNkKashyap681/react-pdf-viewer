@@ -224,8 +224,8 @@ export const Viewer: React.FC<{
                                             defaultScale={defaultScale}
                                             doc={doc}
                                             render={(estimatedPageSizes: PageSize[], initialScale: number) => (
-                                                <div>
-                                                    <PdfWriter writing={true} />
+                                            
+                                                   
                                                     <Inner
                                                         currentFile={{
                                                             data: file.data,
@@ -264,7 +264,7 @@ export const Viewer: React.FC<{
                                                         onZoom={onZoom}
                                                         ref={ref}
                                                     />
-                                                </div>
+                                               
                                             )}
                                             scrollMode={scrollMode}
                                             viewMode={viewMode}
