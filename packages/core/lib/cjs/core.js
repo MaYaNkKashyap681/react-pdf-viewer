@@ -3968,7 +3968,7 @@ var colors = [
     { name: "Blue", code: "blue" },
     { name: "Green", code: "green" }
 ];
-var PdfWriter = function (_a) {
+var DrawingApp = function (_a) {
     var writing = _a.writing;
     var _b = React.useState([]), drawingPaths = _b[0], setDrawingPaths = _b[1];
     var _c = React.useState(''), currentPath = _c[0], setCurrentPath = _c[1];
@@ -3978,6 +3978,7 @@ var PdfWriter = function (_a) {
     var _g = React.useState(colors[0]), selectedColor = _g[0], setSelectedColor = _g[1];
     var _h = React.useState([]), pathCoordinates = _h[0], setPathCoordinates = _h[1];
     var _j = React.useState(null), rectDims = _j[0], setRectDims = _j[1];
+    var _k = React.useState(0); _k[0]; var setScrollPosition = _k[1];
     var drawingRef = React.useRef(null);
     var line = function (pointA, pointB) {
         var lengthX = pointB[0] - pointA[0];
@@ -4007,22 +4008,19 @@ var PdfWriter = function (_a) {
         if (!writing)
             return;
         var x = event.clientX;
-        var y = event.clientY;
-        if (rectDims) {
-            x -= rectDims.left;
-            y -= rectDims.top;
-        }
+        var y = event.clientY + window.scrollY;
         setCurrentPath("M ".concat(x, " ").concat(y));
         setRedoHistory([]);
         setPathCoordinates([[x, y]]);
     };
     var handleMouseMove = function (event) {
+        setScrollPosition(window.scrollY);
         if (currentPath && drawingRef.current) {
             var x = event.clientX;
-            var y = event.clientY;
+            var y = event.clientY + window.scrollY;
             if (rectDims) {
                 x -= rectDims.left;
-                y -= rectDims.top;
+                y += rectDims.top;
             }
             if (x >= 0 &&
                 y >= 0 &&
@@ -4039,9 +4037,7 @@ var PdfWriter = function (_a) {
     };
     var handleMouseUp = function () {
         if (currentPath) {
-            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [
-                { path: currentPath, color: selectedColor.code },
-            ], false); });
+            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [{ path: currentPath, color: selectedColor.code }], false); });
             setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [__spreadArray([], drawingPaths, true)], false); });
             setCurrentPath('');
             setPathCoordinates([]);
@@ -4067,33 +4063,27 @@ var PdfWriter = function (_a) {
         var _a;
         var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
         setRectDims(rect);
-    }, [window.innerWidth, window.innerHeight]);
+    }, []);
     return (React.createElement("div", null,
-        React.createElement("div", { className: "h-screen", style: { border: '1px solid #ccc' }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
+        React.createElement("div", { className: "h-full", style: { border: '1px solid #ccc' }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
             React.createElement("svg", { width: "100%", height: "100%", xmlns: "http://www.w3.org/2000/svg" },
                 React.createElement("g", null,
                     drawingPaths.map(function (pathObj, index) { return (React.createElement("g", { key: index, stroke: pathObj.color, fill: "none", strokeWidth: strokeWidth },
                         React.createElement("path", { d: pathObj.path }))); }),
                     currentPath && (React.createElement("g", { stroke: selectedColor.code, fill: "none", strokeWidth: strokeWidth },
                         React.createElement("path", { d: currentPath })))))),
-        writing &&
-            React.createElement("div", { className: "h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md absolute bottom-4 left-4 flex items-center justify-center group" },
-                React.createElement("div", { className: "flex items-center gap-4" },
-                    React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", style: {
-                            backgroundColor: selectedColor.code,
-                        } }),
-                    React.createElement("span", null, selectedColor.name)),
-                React.createElement("div", { className: "absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex" }, colors.map(function (item) { return (React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
-                        backgroundColor: item.code,
-                    } })); }))),
-        writing &&
-            React.createElement("div", { className: "bg-white shadow-lg rounded-lg absolute top-4 left-4 p-4 flex items-start gap-12 justify-between" },
-                React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0
-                        ? 'hover:bg-gray-300 text-opacity-30'
-                        : 'hover:bg-green-300'), disabled: undoHistory.length === 0 }, "Undo"),
-                React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0
-                        ? 'hover:bg-gray-300 text-opacity-30'
-                        : 'hover-bg-green-300'), disabled: redoHistory.length === 0 }, "Redo"))));
+        React.createElement("div", { className: 'h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group' },
+            React.createElement("div", { className: "flex items-center gap-4" },
+                React.createElement("div", { className: 'w-[2rem] h-[2rem] rounded-full', style: {
+                        backgroundColor: selectedColor.code
+                    } }),
+                React.createElement("span", null, selectedColor.name)),
+            React.createElement("div", { className: 'absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex' }, colors.map(function (item) { return (React.createElement("div", { className: 'w-[2rem] h-[2rem] rounded-full', key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
+                    backgroundColor: item.code
+                } })); }))),
+        React.createElement("div", { className: 'bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between' },
+            React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'), disabled: undoHistory.length === 0 }, "Undo"),
+            React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0 ? 'hover:bg-gray-300 text-opacity-30' : 'hover:bg-green-300'), disabled: redoHistory.length === 0 }, "Redo"))));
 };
 
 var NUM_OVERSCAN_PAGES = 3;
@@ -4162,7 +4152,7 @@ var Viewer = function (_a) {
                     width: '100%',
                 } },
                 React__namespace.createElement(React__namespace.Fragment, null, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement("div", null,
-                            React__namespace.createElement(PdfWriter, { writing: true }),
+                            React__namespace.createElement(DrawingApp, { writing: true }),
                             React__namespace.createElement(Inner, { currentFile: {
                                     data: file.data,
                                     name: file.name,
