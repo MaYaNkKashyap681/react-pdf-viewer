@@ -15,6 +15,7 @@ import { type PdfJs } from '../types/PdfJs';
 import { type Plugin } from '../types/Plugin';
 import { floatToRatio } from '../utils/floatToRatio';
 import { roundToDivide } from '../utils/roundToDivide';
+import PdfWriter from '../extra/PdfWriter';
 
 // The mobile browsers have the limit value for maximum canvas size
 // The values vary but here we set a maximum value of 16 mega-pixels
@@ -120,7 +121,8 @@ export const CanvasLayer: React.FC<{
     }, []);
 
     return (
-        <div className='annotation-container' ref = {ref}>
+        <div className='annotation-container' ref={ref}>
+            <PdfWriter writing={true} />
             <div
                 className="rpv-core__canvas-layer"
                 style={{

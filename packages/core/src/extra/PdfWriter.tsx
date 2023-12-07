@@ -18,7 +18,7 @@ const colors: Color[] = [
   { name: "Green", code: "green" }
 ];
 
-const DrawingApp: React.FC<{
+const PdfWriter: React.FC<{
   writing: boolean;
 }> = ({ writing }) => {
   const [drawingPaths, setDrawingPaths] = useState<DrawingPath[]>([]);
@@ -308,4 +308,4 @@ const DrawingApp: React.FC<{
   );
 };
 
-export default DrawingApp;
+export default PdfWriter;
