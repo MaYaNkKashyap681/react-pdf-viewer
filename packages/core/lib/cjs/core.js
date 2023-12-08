@@ -1603,8 +1603,8 @@ var PdfWriter = function (_a) {
     return (React.createElement("div", { style: {
             width: '100%',
             height: '100%',
-            zIndex: 46,
-        } },
+            zIndex: 999,
+        }, className: 'pdf-drawer' },
         React.createElement("div", { className: "h-full", style: {
                 border: '1px solid #ccc',
             }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
