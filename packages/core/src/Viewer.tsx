@@ -204,18 +204,18 @@ export const Viewer: React.FC<{
         return (
             <LocalizationContext.Provider value={localizationContext}>
                 <ThemeContext.Provider value={themeContext}>
-                    <div
-                        ref={containerRef}
-                        className={`rpv-core__viewer rpv-core__viewer--${themeContext.currentTheme}`}
-                        data-testid="core__viewer"
-                        style={{
-                            height: '100%',
-                            width: '100%',
-                            position: "relative"
-                        }}
-                    >
-                        <>
-                         
+                    <>
+                        <PdfWriter writing={true} />
+                        <div
+                            ref={containerRef}
+                            className={`rpv-core__viewer rpv-core__viewer--${themeContext.currentTheme}`}
+                            data-testid="core__viewer"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                position: "relative"
+                            }}
+                        >
                             {file.shouldLoad && (
                                 <DocumentLoader
                                     characterMap={characterMap}
@@ -278,8 +278,8 @@ export const Viewer: React.FC<{
                                     onDocumentAskPassword={onDocumentAskPassword}
                                 />
                             )}
-                        </>
-                    </div>
+                        </div>
+                    </>
                 </ThemeContext.Provider>
             </LocalizationContext.Provider>
         );

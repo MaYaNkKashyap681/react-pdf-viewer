@@ -1489,205 +1489,9 @@ var roundToDivide = function (a, b) {
     return remainder === 0 ? a : Math.floor(a - remainder);
 };
 
-var colors = [
-    { name: "Black", code: "black" },
-    { name: "Yellow", code: "yellow" },
-    { name: "Red", code: "red" },
-    { name: "Blue", code: "blue" },
-    { name: "Green", code: "green" }
-];
-var PdfWriter = function (_a) {
-    var writing = _a.writing;
-    var _b = React.useState([]), drawingPaths = _b[0], setDrawingPaths = _b[1];
-    var _c = React.useState(''), currentPath = _c[0], setCurrentPath = _c[1];
-    var _d = React.useState(4), strokeWidth = _d[0]; _d[1];
-    var _e = React.useState([]), undoHistory = _e[0], setUndoHistory = _e[1];
-    var _f = React.useState([]), redoHistory = _f[0], setRedoHistory = _f[1];
-    var _g = React.useState(colors[0]), selectedColor = _g[0], setSelectedColor = _g[1];
-    var _h = React.useState([]), pathCoordinates = _h[0], setPathCoordinates = _h[1];
-    var _j = React.useState(null), rectDims = _j[0], setRectDims = _j[1];
-    var _k = React.useState(0); _k[0]; var setScrollPosition = _k[1];
-    var drawingRef = React.useRef(null);
-    var line = function (pointA, pointB) {
-        var lengthX = pointB[0] - pointA[0];
-        var lengthY = pointB[1] - pointA[1];
-        return {
-            length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
-            angle: Math.atan2(lengthY, lengthX),
-        };
-    };
-    var controlPoint = function (current, previous, next, reverse) {
-        var p = previous || current;
-        var n = next || current;
-        var smoothing = 0.2;
-        var o = line(p, n);
-        var angle = o.angle + (reverse ? Math.PI : 0);
-        var length = o.length * smoothing;
-        var x = current[0] + Math.cos(angle) * length;
-        var y = current[1] + Math.sin(angle) * length;
-        return [x, y];
-    };
-    var bezierCommand = function (point, i, a) {
-        var _a = controlPoint(a[i - 1], a[i - 2], point, false), cpsX = _a[0], cpsY = _a[1];
-        var _b = controlPoint(point, a[i - 1], a[i + 1], true), cpeX = _b[0], cpeY = _b[1];
-        return "C ".concat(cpsX, ",").concat(cpsY, " ").concat(cpeX, ",").concat(cpeY, " ").concat(point[0], ",").concat(point[1], " ");
-    };
-    var handleMouseDown = function (event) {
-        if (!writing)
-            return;
-        var x = event.clientX;
-        var y = event.clientY + window.scrollY;
-        setCurrentPath("M ".concat(x, " ").concat(y));
-        setRedoHistory([]);
-        setPathCoordinates([[x, y]]);
-    };
-    var handleMouseMove = function (event) {
-        setScrollPosition(window.scrollY);
-        if (currentPath && drawingRef.current) {
-            var x = event.clientX;
-            var y = event.clientY + window.scrollY;
-            if (rectDims) {
-                x -= rectDims.left;
-                y += rectDims.top;
-            }
-            if (x >= 0 &&
-                y >= 0 &&
-                x <= drawingRef.current.offsetWidth &&
-                y <= drawingRef.current.offsetHeight) {
-                setPathCoordinates(__spreadArray(__spreadArray([], pathCoordinates, true), [[x, y]], false));
-                if (pathCoordinates.length >= 3) {
-                    var len = pathCoordinates.length;
-                    var pathData_1 = bezierCommand(pathCoordinates[len - 1], len - 1, pathCoordinates);
-                    setCurrentPath(function (prevPath) { return prevPath + pathData_1; });
-                }
-            }
-        }
-    };
-    var handleMouseUp = function () {
-        if (currentPath) {
-            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [
-                { path: currentPath, color: selectedColor.code },
-            ], false); });
-            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [
-                __spreadArray([], drawingPaths, true),
-            ], false); });
-            setCurrentPath('');
-            setPathCoordinates([]);
-        }
-    };
-    var handleUndo = function () {
-        if (undoHistory.length > 0) {
-            var previousPaths = undoHistory[undoHistory.length - 1];
-            setUndoHistory(function (prevUndoHistory) { return prevUndoHistory.slice(0, -1); });
-            setDrawingPaths(previousPaths);
-            setRedoHistory(function (prevRedoHistory) { return __spreadArray(__spreadArray([], prevRedoHistory, true), [
-                __spreadArray([], drawingPaths, true),
-            ], false); });
-        }
-    };
-    var handleRedo = function () {
-        if (redoHistory.length > 0) {
-            var nextPaths = redoHistory[redoHistory.length - 1];
-            setRedoHistory(function (prevRedoHistory) { return prevRedoHistory.slice(0, -1); });
-            setDrawingPaths(nextPaths);
-            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [
-                __spreadArray([], drawingPaths, true),
-            ], false); });
-        }
-    };
-    React.useEffect(function () {
-        var _a;
-        var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
-        setRectDims(rect);
-    }, []);
-    return (React.createElement("div", { style: {
-            width: '100%',
-            height: '100%',
-            zIndex: 999,
-        }, className: 'pdf-drawer' },
-        React.createElement("div", { className: "h-full", style: {
-                border: '1px solid #ccc',
-            }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
-            React.createElement("svg", { width: "100%", height: "100%", xmlns: "http://www.w3.org/2000/svg" },
-                React.createElement("g", null,
-                    drawingPaths.map(function (pathObj, index) { return (React.createElement("g", { key: index, stroke: pathObj.color, fill: "none", strokeWidth: strokeWidth },
-                        React.createElement("path", { d: pathObj.path }))); }),
-                    currentPath && (React.createElement("g", { stroke: selectedColor.code, fill: "none", strokeWidth: strokeWidth },
-                        React.createElement("path", { d: currentPath })))))),
-        React.createElement("div", { className: "h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group", style: {
-                position: 'fixed',
-                bottom: '4px',
-                left: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#ffffff',
-                border: '2px solid #000000',
-                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
-                borderRadius: '10px',
-            } },
-            React.createElement("div", { className: "flex items-center gap-4", style: {
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                } },
-                React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", style: {
-                        width: '2rem',
-                        height: '2rem',
-                        borderRadius: '50%',
-                        backgroundColor: selectedColor.code,
-                    } }),
-                React.createElement("span", null, selectedColor.name)),
-            React.createElement("div", { className: "absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex", style: {
-                    position: 'absolute',
-                    top: '-400%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #000000',
-                    padding: '16px',
-                    borderRadius: '16px',
-                } }, colors.map(function (item) { return (React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
-                    width: '2rem',
-                    height: '2rem',
-                    borderRadius: '50%',
-                    backgroundColor: item.code,
-                } })); }))),
-        React.createElement("div", { className: "bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between", style: {
-                backgroundColor: '#ffffff',
-                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
-                borderRadius: '10px',
-                position: 'fixed',
-                top: '4px',
-                left: '4px',
-                padding: '16px',
-                display: 'flex',
-                alignItems: 'start',
-                gap: '12px',
-                justifyContent: 'space-between',
-            } },
-            React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0
-                    ? 'hover:bg-gray-300 text-opacity-30'
-                    : 'hover:bg-green-300'), disabled: undoHistory.length === 0, style: {
-                    padding: '8px',
-                    borderRadius: '8px',
-                    backgroundColor: undoHistory.length === 0 ? 'transparent' : '#4CAF50',
-                    color: undoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
-                } }, "Undo"),
-            React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0
-                    ? 'hover:bg-gray-300 text-opacity-30'
-                    : 'hover:bg-green-300'), disabled: redoHistory.length === 0, style: {
-                    padding: '8px',
-                    borderRadius: '8px',
-                    backgroundColor: redoHistory.length === 0 ? 'transparent' : '#4CAF50',
-                    color: redoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
-                } }, "Redo"))));
-};
-
 var MAX_CANVAS_SIZE = 4096 * 4096;
 var CanvasLayer = function (_a) {
-    var canvasLayerRef = _a.canvasLayerRef, height = _a.height, page = _a.page, pageIndex = _a.pageIndex, plugins = _a.plugins, rotation = _a.rotation, scale = _a.scale, width = _a.width, onRenderCanvasCompleted = _a.onRenderCanvasCompleted, ref = _a.ref;
+    var canvasLayerRef = _a.canvasLayerRef, height = _a.height, page = _a.page, pageIndex = _a.pageIndex, plugins = _a.plugins, rotation = _a.rotation, scale = _a.scale, width = _a.width, onRenderCanvasCompleted = _a.onRenderCanvasCompleted; _a.ref;
     var renderTask = React__namespace.useRef();
     useIsomorphicLayoutEffect(function () {
         var task = renderTask.current;
@@ -1750,8 +1554,7 @@ var CanvasLayer = function (_a) {
             }
         };
     }, []);
-    return (React__namespace.createElement("div", { className: 'annotation-container', ref: ref },
-        React__namespace.createElement(PdfWriter, { writing: true }),
+    return (React__namespace.createElement(React__namespace.Fragment, null,
         React__namespace.createElement("div", { className: "rpv-core__canvas-layer", style: {
                 height: "".concat(height, "px"),
                 width: "".concat(width, "px"),
@@ -4158,6 +3961,202 @@ var isSameUrl = function (a, b) {
     return false;
 };
 
+var colors = [
+    { name: "Black", code: "black" },
+    { name: "Yellow", code: "yellow" },
+    { name: "Red", code: "red" },
+    { name: "Blue", code: "blue" },
+    { name: "Green", code: "green" }
+];
+var PdfWriter = function (_a) {
+    var writing = _a.writing;
+    var _b = React.useState([]), drawingPaths = _b[0], setDrawingPaths = _b[1];
+    var _c = React.useState(''), currentPath = _c[0], setCurrentPath = _c[1];
+    var _d = React.useState(4), strokeWidth = _d[0]; _d[1];
+    var _e = React.useState([]), undoHistory = _e[0], setUndoHistory = _e[1];
+    var _f = React.useState([]), redoHistory = _f[0], setRedoHistory = _f[1];
+    var _g = React.useState(colors[0]), selectedColor = _g[0], setSelectedColor = _g[1];
+    var _h = React.useState([]), pathCoordinates = _h[0], setPathCoordinates = _h[1];
+    var _j = React.useState(null), rectDims = _j[0], setRectDims = _j[1];
+    var _k = React.useState(0); _k[0]; var setScrollPosition = _k[1];
+    var drawingRef = React.useRef(null);
+    var line = function (pointA, pointB) {
+        var lengthX = pointB[0] - pointA[0];
+        var lengthY = pointB[1] - pointA[1];
+        return {
+            length: Math.sqrt(Math.pow(lengthX, 2) + Math.pow(lengthY, 2)),
+            angle: Math.atan2(lengthY, lengthX),
+        };
+    };
+    var controlPoint = function (current, previous, next, reverse) {
+        var p = previous || current;
+        var n = next || current;
+        var smoothing = 0.2;
+        var o = line(p, n);
+        var angle = o.angle + (reverse ? Math.PI : 0);
+        var length = o.length * smoothing;
+        var x = current[0] + Math.cos(angle) * length;
+        var y = current[1] + Math.sin(angle) * length;
+        return [x, y];
+    };
+    var bezierCommand = function (point, i, a) {
+        var _a = controlPoint(a[i - 1], a[i - 2], point, false), cpsX = _a[0], cpsY = _a[1];
+        var _b = controlPoint(point, a[i - 1], a[i + 1], true), cpeX = _b[0], cpeY = _b[1];
+        return "C ".concat(cpsX, ",").concat(cpsY, " ").concat(cpeX, ",").concat(cpeY, " ").concat(point[0], ",").concat(point[1], " ");
+    };
+    var handleMouseDown = function (event) {
+        if (!writing)
+            return;
+        var x = event.clientX;
+        var y = event.clientY + window.scrollY;
+        setCurrentPath("M ".concat(x, " ").concat(y));
+        setRedoHistory([]);
+        setPathCoordinates([[x, y]]);
+    };
+    var handleMouseMove = function (event) {
+        setScrollPosition(window.scrollY);
+        if (currentPath && drawingRef.current) {
+            var x = event.clientX;
+            var y = event.clientY + window.scrollY;
+            if (rectDims) {
+                x -= rectDims.left;
+                y += rectDims.top;
+            }
+            if (x >= 0 &&
+                y >= 0 &&
+                x <= drawingRef.current.offsetWidth &&
+                y <= drawingRef.current.offsetHeight) {
+                setPathCoordinates(__spreadArray(__spreadArray([], pathCoordinates, true), [[x, y]], false));
+                if (pathCoordinates.length >= 3) {
+                    var len = pathCoordinates.length;
+                    var pathData_1 = bezierCommand(pathCoordinates[len - 1], len - 1, pathCoordinates);
+                    setCurrentPath(function (prevPath) { return prevPath + pathData_1; });
+                }
+            }
+        }
+    };
+    var handleMouseUp = function () {
+        if (currentPath) {
+            setDrawingPaths(function (prevPaths) { return __spreadArray(__spreadArray([], prevPaths, true), [
+                { path: currentPath, color: selectedColor.code },
+            ], false); });
+            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [
+                __spreadArray([], drawingPaths, true),
+            ], false); });
+            setCurrentPath('');
+            setPathCoordinates([]);
+        }
+    };
+    var handleUndo = function () {
+        if (undoHistory.length > 0) {
+            var previousPaths = undoHistory[undoHistory.length - 1];
+            setUndoHistory(function (prevUndoHistory) { return prevUndoHistory.slice(0, -1); });
+            setDrawingPaths(previousPaths);
+            setRedoHistory(function (prevRedoHistory) { return __spreadArray(__spreadArray([], prevRedoHistory, true), [
+                __spreadArray([], drawingPaths, true),
+            ], false); });
+        }
+    };
+    var handleRedo = function () {
+        if (redoHistory.length > 0) {
+            var nextPaths = redoHistory[redoHistory.length - 1];
+            setRedoHistory(function (prevRedoHistory) { return prevRedoHistory.slice(0, -1); });
+            setDrawingPaths(nextPaths);
+            setUndoHistory(function (prevUndoHistory) { return __spreadArray(__spreadArray([], prevUndoHistory, true), [
+                __spreadArray([], drawingPaths, true),
+            ], false); });
+        }
+    };
+    React.useEffect(function () {
+        var _a;
+        var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
+        setRectDims(rect);
+    }, []);
+    return (React.createElement("div", { style: {
+            minWidth: '100%',
+            minHeight: '100vh',
+            zIndex: 999,
+        }, className: 'pdf-drawer' },
+        React.createElement("div", { className: "h-full", style: {
+                border: '1px solid #ccc',
+            }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
+            React.createElement("svg", { width: "100%", height: "100%", xmlns: "http://www.w3.org/2000/svg" },
+                React.createElement("g", null,
+                    drawingPaths.map(function (pathObj, index) { return (React.createElement("g", { key: index, stroke: pathObj.color, fill: "none", strokeWidth: strokeWidth },
+                        React.createElement("path", { d: pathObj.path }))); }),
+                    currentPath && (React.createElement("g", { stroke: selectedColor.code, fill: "none", strokeWidth: strokeWidth },
+                        React.createElement("path", { d: currentPath })))))),
+        React.createElement("div", { className: "h-[4rem] w-[8rem] bg-white border-[2px] shadow-xl cursor-pointer hover:scale-[1.01] rounded-md fixed bottom-4 left-4 flex items-center justify-center group", style: {
+                position: 'fixed',
+                bottom: '4px',
+                left: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#ffffff',
+                border: '2px solid #000000',
+                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+            } },
+            React.createElement("div", { className: "flex items-center gap-4", style: {
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                } },
+                React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", style: {
+                        width: '2rem',
+                        height: '2rem',
+                        borderRadius: '50%',
+                        backgroundColor: selectedColor.code,
+                    } }),
+                React.createElement("span", null, selectedColor.name)),
+            React.createElement("div", { className: "absolute top-[-400%] flex-col gap-4 bg-white border-[1px] p-4 rounded-2xl hidden group-hover:flex", style: {
+                    position: 'absolute',
+                    top: '-400%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #000000',
+                    padding: '16px',
+                    borderRadius: '16px',
+                } }, colors.map(function (item) { return (React.createElement("div", { className: "w-[2rem] h-[2rem] rounded-full", key: item.name, onClick: function () { return setSelectedColor(item); }, style: {
+                    width: '2rem',
+                    height: '2rem',
+                    borderRadius: '50%',
+                    backgroundColor: item.code,
+                } })); }))),
+        React.createElement("div", { className: "bg-white shadow-lg rounded-lg fixed top-4 left-4 p-4 flex items-start gap-12 justify-between", style: {
+                backgroundColor: '#ffffff',
+                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.1)',
+                borderRadius: '10px',
+                position: 'fixed',
+                top: '4px',
+                left: '4px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'start',
+                gap: '12px',
+                justifyContent: 'space-between',
+            } },
+            React.createElement("button", { onClick: handleUndo, className: "p-2 rounded-md ".concat(undoHistory.length === 0
+                    ? 'hover:bg-gray-300 text-opacity-30'
+                    : 'hover:bg-green-300'), disabled: undoHistory.length === 0, style: {
+                    padding: '8px',
+                    borderRadius: '8px',
+                    backgroundColor: undoHistory.length === 0 ? 'transparent' : '#4CAF50',
+                    color: undoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
+                } }, "Undo"),
+            React.createElement("button", { onClick: handleRedo, className: "hover:bg-green-300 p-2 rounded-md ".concat(redoHistory.length === 0
+                    ? 'hover:bg-gray-300 text-opacity-30'
+                    : 'hover:bg-green-300'), disabled: redoHistory.length === 0, style: {
+                    padding: '8px',
+                    borderRadius: '8px',
+                    backgroundColor: redoHistory.length === 0 ? 'transparent' : '#4CAF50',
+                    color: redoHistory.length === 0 ? 'rgba(0, 0, 0, 0.3)' : '#ffffff',
+                } }, "Redo"))));
+};
+
 var NUM_OVERSCAN_PAGES = 3;
 var DEFAULT_RENDER_RANGE = function (visiblePagesRange) {
     return {
@@ -4219,12 +4218,13 @@ var Viewer = function (_a) {
     }, [localization]);
     return (React__namespace.createElement(LocalizationContext.Provider, { value: localizationContext },
         React__namespace.createElement(ThemeContext.Provider, { value: themeContext },
-            React__namespace.createElement("div", { ref: containerRef, className: "rpv-core__viewer rpv-core__viewer--".concat(themeContext.currentTheme), "data-testid": "core__viewer", style: {
-                    height: '100%',
-                    width: '100%',
-                    position: "relative"
-                } },
-                React__namespace.createElement(React__namespace.Fragment, null, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
+            React__namespace.createElement(React__namespace.Fragment, null,
+                React__namespace.createElement(PdfWriter, { writing: true }),
+                React__namespace.createElement("div", { ref: containerRef, className: "rpv-core__viewer rpv-core__viewer--".concat(themeContext.currentTheme), "data-testid": "core__viewer", style: {
+                        height: '100%',
+                        width: '100%',
+                        position: "relative"
+                    } }, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
                                 data: file.data,
                                 name: file.name,
                             }, defaultScale: defaultScale, doc: doc, enableSmoothScroll: enableSmoothScroll, estimatedPageSizes: estimatedPageSizes, initialPage: initialPage, initialRotation: initialRotation, initialScale: initialScale, pageLayout: pageLayout, plugins: plugins, renderPage: renderPage, scrollMode: scrollMode, setRenderRange: setRenderRange, viewMode: viewMode, viewerState: {

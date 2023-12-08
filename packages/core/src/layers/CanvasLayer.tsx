@@ -121,8 +121,8 @@ export const CanvasLayer: React.FC<{
     }, []);
 
     return (
-        <div className='annotation-container' ref={ref}>
-            <PdfWriter writing={true} />
+        <>
+            {/* <PdfWriter writing={true} /> */}
             <div
                 className="rpv-core__canvas-layer"
                 style={{
@@ -132,6 +132,6 @@ export const CanvasLayer: React.FC<{
             >
                 <canvas ref={canvasLayerRef} />
             </div>
-        </div>
+        </>
     );
 };
