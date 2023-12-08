@@ -151,9 +151,10 @@ const PdfWriter: React.FC<{
 
   return (
     <div style={{
-      minWidth: '100%',
-      minHeight: '100vh',
+      width: 'auto',
+      height: 'auto',
       zIndex: 999,
+      position: 'absolute'
     }} className='pdf-drawer'>
       <div
         className="h-full"

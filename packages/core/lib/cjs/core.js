@@ -4073,9 +4073,10 @@ var PdfWriter = function (_a) {
         setRectDims(rect);
     }, []);
     return (React.createElement("div", { style: {
-            minWidth: '100%',
-            minHeight: '100vh',
+            width: 'auto',
+            height: 'auto',
             zIndex: 999,
+            position: 'absolute'
         }, className: 'pdf-drawer' },
         React.createElement("div", { className: "h-full", style: {
                 border: '1px solid #ccc',
@@ -4219,26 +4220,28 @@ var Viewer = function (_a) {
     return (React__namespace.createElement(LocalizationContext.Provider, { value: localizationContext },
         React__namespace.createElement(ThemeContext.Provider, { value: themeContext },
             React__namespace.createElement(React__namespace.Fragment, null,
-                React__namespace.createElement(PdfWriter, { writing: true }),
                 React__namespace.createElement("div", { ref: containerRef, className: "rpv-core__viewer rpv-core__viewer--".concat(themeContext.currentTheme), "data-testid": "core__viewer", style: {
                         height: '100%',
                         width: '100%',
-                        position: "relative"
-                    } }, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement(Inner, { currentFile: {
-                                data: file.data,
-                                name: file.name,
-                            }, defaultScale: defaultScale, doc: doc, enableSmoothScroll: enableSmoothScroll, estimatedPageSizes: estimatedPageSizes, initialPage: initialPage, initialRotation: initialRotation, initialScale: initialScale, pageLayout: pageLayout, plugins: plugins, renderPage: renderPage, scrollMode: scrollMode, setRenderRange: setRenderRange, viewMode: viewMode, viewerState: {
-                                file: file,
-                                fullScreenMode: exports.FullScreenMode.Normal,
-                                pageIndex: -1,
-                                pageHeight: estimatedPageSizes[0].pageHeight,
-                                pageWidth: estimatedPageSizes[0].pageWidth,
-                                pagesRotation: new Map(),
-                                rotation: initialRotation,
-                                scale: initialScale,
-                                scrollMode: scrollMode,
-                                viewMode: viewMode,
-                            }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref })); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword })))))));
+                    } }, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement("div", { style: {
+                                position: 'relative'
+                            } },
+                            React__namespace.createElement(PdfWriter, { writing: true }),
+                            React__namespace.createElement(Inner, { currentFile: {
+                                    data: file.data,
+                                    name: file.name,
+                                }, defaultScale: defaultScale, doc: doc, enableSmoothScroll: enableSmoothScroll, estimatedPageSizes: estimatedPageSizes, initialPage: initialPage, initialRotation: initialRotation, initialScale: initialScale, pageLayout: pageLayout, plugins: plugins, renderPage: renderPage, scrollMode: scrollMode, setRenderRange: setRenderRange, viewMode: viewMode, viewerState: {
+                                    file: file,
+                                    fullScreenMode: exports.FullScreenMode.Normal,
+                                    pageIndex: -1,
+                                    pageHeight: estimatedPageSizes[0].pageHeight,
+                                    pageWidth: estimatedPageSizes[0].pageWidth,
+                                    pagesRotation: new Map(),
+                                    rotation: initialRotation,
+                                    scale: initialScale,
+                                    scrollMode: scrollMode,
+                                    viewMode: viewMode,
+                                }, onDocumentLoad: onDocumentLoad, onOpenFile: openFile, onPageChange: onPageChange, onRotate: onRotate, onRotatePage: onRotatePage, onZoom: onZoom, ref: ref }))); }, scrollMode: scrollMode, viewMode: viewMode })); }, renderError: renderError, renderLoader: renderLoader, renderProtectedView: renderProtectedView, transformGetDocumentParams: transformGetDocumentParams, withCredentials: withCredentials, onDocumentAskPassword: onDocumentAskPassword })))))));
 };
 
 var Worker = function (_a) {
