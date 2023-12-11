@@ -4080,6 +4080,8 @@ var PdfWriter = function (_a) {
         }, className: 'pdf-drawer' },
         React.createElement("div", { className: "h-full", style: {
                 border: '1px solid #ccc',
+                height: '100%',
+                width: '100%'
             }, onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, ref: drawingRef },
             React.createElement("svg", { width: "100%", height: "100%", xmlns: "http://www.w3.org/2000/svg" },
                 React.createElement("g", null,

@@ -160,6 +160,8 @@ const PdfWriter: React.FC<{
         className="h-full"
         style={{
           border: '1px solid #ccc',
+          height: '100%',
+          width: '100%'
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
