@@ -4072,12 +4072,10 @@ var PdfWriter = function (_a) {
         console.log("");
     };
     React.useEffect(function () {
-        var scrollContainer = document.getElementById('scrollerbar');
-        console.log(scrollContainer);
-        if (scrollContainer) {
-            scrollContainer.addEventListener('scroll', handleScroll);
+        if (drawingRef === null || drawingRef === void 0 ? void 0 : drawingRef.current) {
+            drawingRef === null || drawingRef === void 0 ? void 0 : drawingRef.current.addEventListener('scroll', handleScroll);
             return function () {
-                scrollContainer.removeEventListener('scroll', handleScroll);
+                drawingRef === null || drawingRef === void 0 ? void 0 : drawingRef.current.removeEventListener('scroll', handleScroll);
             };
         }
     }, []);
