@@ -144,6 +144,20 @@ const PdfWriter: React.FC<{
     }
   };
 
+  const handleScroll = (e) => {
+    console.log(e);
+  }
+
+  useEffect(() => {
+    const scrollContainer = document.getElementById('scrollerbar');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
+
   useEffect(() => {
     const rect = drawingRef.current?.getBoundingClientRect();
     setRectDims(rect);
@@ -161,6 +175,7 @@ const PdfWriter: React.FC<{
       position: 'absolute'
     }} className='pdf-drawer'>
       <div
+        id="scrollerbar"
         className="h-full"
         style={{
           border: '1px solid #ccc',
@@ -277,11 +292,10 @@ const PdfWriter: React.FC<{
       >
         <button
           onClick={handleUndo}
-          className={`p-2 rounded-md ${
-            undoHistory.length === 0
-              ? 'hover:bg-gray-300 text-opacity-30'
-              : 'hover:bg-green-300'
-          }`}
+          className={`p-2 rounded-md ${undoHistory.length === 0
+            ? 'hover:bg-gray-300 text-opacity-30'
+            : 'hover:bg-green-300'
+            }`}
           disabled={undoHistory.length === 0}
           style={{
             padding: '8px',
@@ -295,11 +309,10 @@ const PdfWriter: React.FC<{
         </button>
         <button
           onClick={handleRedo}
-          className={`hover:bg-green-300 p-2 rounded-md ${
-            redoHistory.length === 0
-              ? 'hover:bg-gray-300 text-opacity-30'
-              : 'hover:bg-green-300'
-          }`}
+          className={`hover:bg-green-300 p-2 rounded-md ${redoHistory.length === 0
+            ? 'hover:bg-gray-300 text-opacity-30'
+            : 'hover:bg-green-300'
+            }`}
           disabled={redoHistory.length === 0}
           style={{
             padding: '8px',

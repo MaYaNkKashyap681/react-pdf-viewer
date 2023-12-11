@@ -4067,6 +4067,18 @@ var PdfWriter = function (_a) {
             ], false); });
         }
     };
+    var handleScroll = function (e) {
+        console.log(e);
+    };
+    React.useEffect(function () {
+        var scrollContainer = document.getElementById('scrollerbar');
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', handleScroll);
+            return function () {
+                scrollContainer.removeEventListener('scroll', handleScroll);
+            };
+        }
+    }, []);
     React.useEffect(function () {
         var _a;
         var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
@@ -4082,7 +4094,7 @@ var PdfWriter = function (_a) {
             right: 0,
             position: 'absolute'
         }, className: 'pdf-drawer' },
-        React.createElement("div", { className: "h-full", style: {
+        React.createElement("div", { id: "scrollerbar", className: "h-full", style: {
                 border: '1px solid #ccc',
                 height: '100%',
                 width: '100%'
