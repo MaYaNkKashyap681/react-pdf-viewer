@@ -146,10 +146,12 @@ const PdfWriter: React.FC<{
 
   const handleScroll = (e) => {
     console.log(e);
+    console.log("")
   }
 
   useEffect(() => {
     const scrollContainer = document.getElementById('scrollerbar');
+    console.log(scrollContainer);
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', handleScroll);
       return () => {

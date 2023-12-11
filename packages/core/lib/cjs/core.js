@@ -4069,9 +4069,11 @@ var PdfWriter = function (_a) {
     };
     var handleScroll = function (e) {
         console.log(e);
+        console.log("");
     };
     React.useEffect(function () {
         var scrollContainer = document.getElementById('scrollerbar');
+        console.log(scrollContainer);
         if (scrollContainer) {
             scrollContainer.addEventListener('scroll', handleScroll);
             return function () {
