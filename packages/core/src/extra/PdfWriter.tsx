@@ -163,7 +163,7 @@ const PdfWriter: React.FC<{
     const rect = drawingRef.current?.getBoundingClientRect();
     console.log(rect)
     setRectDims(rect);
-  }, [rectDims]);
+  }, []);
 
   return (
     <div style={{

@@ -4073,7 +4073,7 @@ var PdfWriter = function (_a) {
         var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
         console.log(rect);
         setRectDims(rect);
-    }, [rectDims]);
+    }, []);
     return (React.createElement("div", { style: {
             width: 'auto',
             height: 'auto',
