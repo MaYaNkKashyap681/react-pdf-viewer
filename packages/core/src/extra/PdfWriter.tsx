@@ -68,7 +68,7 @@ const PdfWriter: React.FC<{
   const handleMouseDown = (event: React.MouseEvent) => {
     if (!writing) return;
     const x = event.clientX - rectDims.left;
-    const y = event.clientY + window.scrollY;
+    const y = event.clientY + window.scrollY + rectDims.top;
     setCurrentPath(`M ${x} ${y}`);
     setRedoHistory([]); // Clear redo history when a new path is drawn
     setPathCoordinates([[x, y]]);
