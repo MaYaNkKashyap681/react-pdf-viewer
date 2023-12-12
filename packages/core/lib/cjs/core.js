@@ -4019,6 +4019,7 @@ var PdfWriter = function (_a) {
             var x = event.clientX;
             var y = event.clientY + window.scrollY;
             if (rectDims) {
+                x -= rectDims.left;
                 y += rectDims.top;
             }
             if (x >= 0 &&
@@ -4066,23 +4067,12 @@ var PdfWriter = function (_a) {
             ], false); });
         }
     };
-    var handleScroll = function (e) {
-        console.log(e);
-        console.log("");
-    };
-    React.useEffect(function () {
-        if (drawingRef === null || drawingRef === void 0 ? void 0 : drawingRef.current) {
-            drawingRef === null || drawingRef === void 0 ? void 0 : drawingRef.current.addEventListener('scroll', handleScroll);
-            return function () {
-                drawingRef === null || drawingRef === void 0 ? void 0 : drawingRef.current.removeEventListener('scroll', handleScroll);
-            };
-        }
-    }, []);
     React.useEffect(function () {
         var _a;
         var rect = (_a = drawingRef.current) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
+        console.log(rect);
         setRectDims(rect);
-    }, []);
+    }, [rectDims]);
     return (React.createElement("div", { style: {
             width: 'auto',
             height: 'auto',

@@ -80,7 +80,7 @@ const PdfWriter: React.FC<{
       let x = event.clientX;
       let y = event.clientY + window.scrollY;
       if (rectDims) {
-        // x -= rectDims.left;
+        x -= rectDims.left;
         y += rectDims.top;
       }
 
@@ -144,24 +144,25 @@ const PdfWriter: React.FC<{
     }
   };
 
-  const handleScroll = (e) => {
-    console.log(e);
-    console.log("")
-  }
+  // const handleScroll = (e) => {
+  //   console.log(e);
+  //   console.log("")
+  // }
 
-  useEffect(() => {
-    if (drawingRef?.current) {
-      drawingRef?.current.addEventListener('scroll', handleScroll);
-      return () => {
-        drawingRef?.current.removeEventListener('scroll', handleScroll);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (drawingRef?.current) {
+  //     drawingRef?.current.addEventListener('scroll', handleScroll);
+  //     return () => {
+  //       drawingRef?.current.removeEventListener('scroll', handleScroll);
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     const rect = drawingRef.current?.getBoundingClientRect();
+    console.log(rect)
     setRectDims(rect);
-  }, []);
+  }, [rectDims]);
 
   return (
     <div style={{
