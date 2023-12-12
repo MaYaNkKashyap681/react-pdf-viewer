@@ -4007,6 +4007,7 @@ var PdfWriter = function (_a) {
     var handleMouseDown = function (event) {
         if (!writing)
             return;
+        console.log(event.clientY, window.scrollY);
         var x = event.clientX - rectDims.left;
         var y = event.clientY + window.scrollY;
         setCurrentPath("M ".concat(x, " ").concat(y));

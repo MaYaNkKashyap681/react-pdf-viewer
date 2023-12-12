@@ -64,13 +64,14 @@ const PdfWriter: React.FC<{
     const [cpeX, cpeY] = controlPoint(point, a[i - 1], a[i + 1], true);
     return `C ${cpsX},${cpsY} ${cpeX},${cpeY} ${point[0]},${point[1]} `;
   };
-
   const handleMouseDown = (event: React.MouseEvent) => {
     if (!writing) return;
+
+    console.log(event.clientY, window.scrollY)
     const x = event.clientX - rectDims.left;
     const y = event.clientY + window.scrollY;
     setCurrentPath(`M ${x} ${y}`);
-    setRedoHistory([]); // Clear redo history when a new path is drawn
+    setRedoHistory([]);
     setPathCoordinates([[x, y]]);
   };
 
