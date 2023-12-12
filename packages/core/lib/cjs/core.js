@@ -4008,7 +4008,7 @@ var PdfWriter = function (_a) {
         if (!writing)
             return;
         var x = event.clientX - rectDims.left;
-        var y = event.clientY + window.scrollY + rectDims.top;
+        var y = event.clientY + window.scrollY;
         setCurrentPath("M ".concat(x, " ").concat(y));
         setRedoHistory([]);
         setPathCoordinates([[x, y]]);
