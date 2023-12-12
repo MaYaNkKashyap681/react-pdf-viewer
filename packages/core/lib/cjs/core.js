@@ -4019,7 +4019,6 @@ var PdfWriter = function (_a) {
             var x = event.clientX;
             var y = event.clientY + window.scrollY;
             if (rectDims) {
-                x -= rectDims.left;
                 y += rectDims.top;
             }
             if (x >= 0 &&

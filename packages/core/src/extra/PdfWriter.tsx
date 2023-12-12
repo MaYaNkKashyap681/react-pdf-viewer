@@ -80,7 +80,7 @@ const PdfWriter: React.FC<{
       let x = event.clientX;
       let y = event.clientY + window.scrollY;
       if (rectDims) {
-        x -= rectDims.left;
+        // x -= rectDims.left;
         y += rectDims.top;
       }
 
