@@ -230,7 +230,7 @@ export const Viewer: React.FC<{
                                                 <div style={{
                                                     position: 'relative'
                                                 }}>
-                                                 <PdfWriter writing={true} scrollPos = {scrollPos}/>        
+                                                 <PdfWriter writing={writing} scrollPos = {scrollPos}/>        
                                                     <Inner
                                                         currentFile={{
                                                             data: file.data,
