@@ -20,7 +20,8 @@ const colors: Color[] = [
 
 const PdfWriter: React.FC<{
   writing: boolean;
-}> = ({ writing }) => {
+  scrollPos: number
+}> = ({ writing, scrollPos }) => {
   const [drawingPaths, setDrawingPaths] = useState<DrawingPath[]>([]);
   const [currentPath, setCurrentPath] = useState<string>('');
   const [strokeWidth, setStrokeWidth] = useState<number>(4);
@@ -67,19 +68,19 @@ const PdfWriter: React.FC<{
   const handleMouseDown = (event: React.MouseEvent) => {
     if (!writing) return;
 
-    console.log(event.clientY, window.scrollY)
+    // console.log(event.clientY, window.scrollY)
     const x = event.clientX - rectDims.left;
-    const y = event.clientY + window.scrollY;
+    const y = event.clientY + scrollPos;
     setCurrentPath(`M ${x} ${y}`);
     setRedoHistory([]);
     setPathCoordinates([[x, y]]);
   };
 
   const handleMouseMove = (event: React.MouseEvent) => {
-    setScrollPosition(window.scrollY);
+    setScrollPosition(scrollPos);
     if (currentPath && drawingRef.current) {
       let x = event.clientX;
-      let y = event.clientY + window.scrollY;
+      let y = event.clientY + scrollPos;
       if (rectDims) {
         x -= rectDims.left;
         y += rectDims.top;

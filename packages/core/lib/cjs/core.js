@@ -3969,7 +3969,7 @@ var colors = [
     { name: "Green", code: "green" }
 ];
 var PdfWriter = function (_a) {
-    var writing = _a.writing;
+    var writing = _a.writing, scrollPos = _a.scrollPos;
     var _b = React.useState([]), drawingPaths = _b[0], setDrawingPaths = _b[1];
     var _c = React.useState(''), currentPath = _c[0], setCurrentPath = _c[1];
     var _d = React.useState(4), strokeWidth = _d[0]; _d[1];
@@ -4007,18 +4007,17 @@ var PdfWriter = function (_a) {
     var handleMouseDown = function (event) {
         if (!writing)
             return;
-        console.log(event.clientY, window.scrollY);
         var x = event.clientX - rectDims.left;
-        var y = event.clientY + window.scrollY;
+        var y = event.clientY + scrollPos;
         setCurrentPath("M ".concat(x, " ").concat(y));
         setRedoHistory([]);
         setPathCoordinates([[x, y]]);
     };
     var handleMouseMove = function (event) {
-        setScrollPosition(window.scrollY);
+        setScrollPosition(scrollPos);
         if (currentPath && drawingRef.current) {
             var x = event.clientX;
-            var y = event.clientY + window.scrollY;
+            var y = event.clientY + scrollPos;
             if (rectDims) {
                 x -= rectDims.left;
                 y += rectDims.top;
@@ -4199,7 +4198,7 @@ var Viewer = function (_a) {
     } : _p, _q = _a.onRotatePage, onRotatePage = _q === void 0 ? function () {
     } : _q, _r = _a.onSwitchTheme, onSwitchTheme = _r === void 0 ? function () {
     } : _r, _s = _a.onZoom, onZoom = _s === void 0 ? function () {
-    } : _s, ref = _a.ref; _a.writing;
+    } : _s, ref = _a.ref; _a.writing; var scrollPos = _a.scrollPos;
     var _t = React__namespace.useState({
         data: fileUrl,
         name: typeof fileUrl === 'string' ? fileUrl : '',
@@ -4250,7 +4249,7 @@ var Viewer = function (_a) {
                     } }, file.shouldLoad && (React__namespace.createElement(DocumentLoader, { characterMap: characterMap, file: file.data, httpHeaders: httpHeaders, render: function (doc) { return (React__namespace.createElement(PageSizeCalculator, { defaultScale: defaultScale, doc: doc, render: function (estimatedPageSizes, initialScale) { return (React__namespace.createElement("div", { style: {
                                 position: 'relative'
                             } },
-                            React__namespace.createElement(PdfWriter, { writing: true }),
+                            React__namespace.createElement(PdfWriter, { writing: true, scrollPos: scrollPos }),
                             React__namespace.createElement(Inner, { currentFile: {
                                     data: file.data,
                                     name: file.name,

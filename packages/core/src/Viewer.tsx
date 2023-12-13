@@ -99,7 +99,8 @@ export const Viewer: React.FC<{
     onSwitchTheme?(theme: string): void;
     onZoom?(e: ZoomEvent): void;
     ref?: React.Ref<HTMLDivElement>
-    writing: boolean
+    writing?: boolean
+    scrollPos?: number
 }> = ({
     characterMap,
     defaultScale,
@@ -144,7 +145,8 @@ export const Viewer: React.FC<{
         /**/
     },
     ref,
-    writing
+    writing,
+    scrollPos
 }) => {
         const [file, setFile] = React.useState<FileState>({
             data: fileUrl,
@@ -228,7 +230,7 @@ export const Viewer: React.FC<{
                                                 <div style={{
                                                     position: 'relative'
                                                 }}>
-                                                 <PdfWriter writing={true} />        
+                                                 <PdfWriter writing={true} scrollPos = {scrollPos}/>        
                                                     <Inner
                                                         currentFile={{
                                                             data: file.data,
