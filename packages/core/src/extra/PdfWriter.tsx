@@ -145,19 +145,26 @@ const PdfWriter: React.FC<{
     }
   };
 
-  // const handleScroll = (e) => {
-  //   console.log(e);
-  //   console.log("")
-  // }
+  const boxRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (drawingRef?.current) {
-  //     drawingRef?.current.addEventListener('scroll', handleScroll);
-  //     return () => {
-  //       drawingRef?.current.removeEventListener('scroll', handleScroll);
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+      const handleScroll = () => {
+          if (boxRef.current) {
+              const scrollY = boxRef.current.scrollTop;
+              console.log('Scrolling Y:', scrollY);
+          }
+      };
+
+      if (boxRef.current) {
+          // Attach the scroll event listener to the current ref
+          boxRef.current.addEventListener('scroll', handleScroll);
+
+          // Remove the event listener when the component is unmounted
+          return () => {
+              boxRef.current.removeEventListener('scroll', handleScroll);
+          };
+      }
+  }, []);
 
   useEffect(() => {
     const rect = drawingRef.current?.getBoundingClientRect();
@@ -174,8 +181,9 @@ const PdfWriter: React.FC<{
       bottom: 0,
       left: 0,
       right: 0,
-      position: 'absolute'
-    }} className='pdf-drawer'>
+      position: 'absolute',
+      overflowY: 'scroll'
+    }} className='pdf-drawer' ref = {boxRef}>
       <div
         id="scrollerbar"
         className="h-full"
